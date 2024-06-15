@@ -38,9 +38,11 @@ void main() {
 
 class MapGame extends FlameGame with HasCollisionDetection {
   late final JoystickComponent joystick;
+  late Character character;
   Question? currentQuestion;
   String? questionTitle;
   int score = 0;
+  final worldSize = Vector2(300*64, 200*64);
   
   MapGame() :
       super(
@@ -55,7 +57,14 @@ class MapGame extends FlameGame with HasCollisionDetection {
       ..zoom = 1.0
       ..anchor = Anchor.center;
 
+    final Image characterImage = await Flame.images.load('character.png');
+    character = Character(characterImage)
+      ..position = Vector2(64,64)
+      ..direction = 1
+      ..priority = 100;
+    world.add(character);
 
+    camera.follow(character);
 
     final knobPaint = BasicPalette.blue.withAlpha(100).paint();
     final backgroundPaint = BasicPalette.blue.withAlpha(50).paint();
@@ -63,8 +72,9 @@ class MapGame extends FlameGame with HasCollisionDetection {
       knob: CircleComponent(radius: 30, paint: knobPaint),
       background: CircleComponent(radius: 100, paint: backgroundPaint),
       margin: const EdgeInsets.only(left: 40, top: 200),
+      priority: 1,
     );
-    add(joystick);
+    camera.viewport.add(joystick);
     overlays.add('score');
   }
 
@@ -74,27 +84,19 @@ class MapGame extends FlameGame with HasCollisionDetection {
 }
 
 class MapWorld extends World {
-  late Character character;
 
   @override
   Future<void> onLoad() async {
     final homeMap = await TiledComponent.load('map.tmx', Vector2.all(64));
 
     add(homeMap);
-    final walls = Wall( homeMap.tileMap.getLayer<TileLayer>('Walls'), Vector2.all(64));
+    final walls = WallGroup( homeMap.tileMap.getLayer<TileLayer>('Walls'), Vector2.all(64));
     add(walls);
     final manager = InteractionManager( homeMap.tileMap.getLayer<ObjectGroup>('Interactions')!, homeMap.tileMap.map, Vector2.all(64));
     for(final c in manager.compnents) {
       add(c);
     }
-    final tile = homeMap.tileMap.map.tileByGid(23);
-
-    final Image characterImage = await Flame.images.load('character.png');
-    character = Character(characterImage)
-      ..position = Vector2(64,64)
-      ..direction = 1;
-    add(character);
-
+    
     super.onLoad();
   }
 }

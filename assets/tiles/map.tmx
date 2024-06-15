@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="300" height="200" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="49">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="300" height="200" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="51">
  <tileset firstgid="1" source="background.tsx"/>
  <tileset firstgid="484" source="objects.tsx"/>
  <layer id="1" name="Background" width="300" height="200">
@@ -412,14 +412,7 @@
  </layer>
  <objectgroup id="4" name="Interactions">
   <object id="42" name="Door" gid="119" x="256" y="32" width="32" height="32"/>
-  <object id="43" type="email" gid="485" x="256" y="96" width="32" height="32">
-   <properties>
-    <property name="question" value="Hello"/>
-   </properties>
-  </object>
-  <object id="45" gid="485" x="-192" y="288" width="32" height="32"/>
-  <object id="46" gid="485" x="160" y="96" width="32" height="32"/>
-  <object id="47" gid="64" x="256" y="96" width="32" height="32"/>
-  <object id="48" gid="485" x="352" y="608" width="32" height="32"/>
+  <object id="46" type="email" gid="485" x="160" y="96" width="32" height="32"/>
+  <object id="48" type="email" gid="485" x="352" y="608" width="32" height="32"/>
  </objectgroup>
 </map>

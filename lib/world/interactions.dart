@@ -25,7 +25,7 @@ class InteractionManager {
                 break;
 
               default:
-                compnents.add(InteractComponent(tile, tileset.image!, o));
+                compnents.add(InteractComponent(tile, image, o));
                 break;
             }
 

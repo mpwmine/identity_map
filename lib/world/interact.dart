@@ -21,6 +21,7 @@ class InteractComponent extends SpriteComponent with CollisionCallbacks, HasGame
 
     x = object.x * 2;
     y = object.y * 2;
+    size = Vector2(object.width, object.height);
 
     if(image.source != null) {
       sprite = Sprite(

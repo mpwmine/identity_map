@@ -86,7 +86,7 @@ class Character extends SpriteAnimationComponent
           x += vectorX;
         }
       }
-      if (vectorX > 0 && x < gameRef.size[0]) {
+      if (vectorX > 0 && x < gameRef.worldSize[0]) {
         if (!collideDirections.contains(RIGHT)) {
           x += vectorX;
         }
@@ -96,15 +96,13 @@ class Character extends SpriteAnimationComponent
           y += vectorY;
         }
       }
-      if (vectorY > 0 && y < gameRef.size[1]) {
+      if (vectorY > 0 && y < gameRef.worldSize[1]) {
         if (!collideDirections.contains(DOWN)) {
           y += vectorY;
         }
       }
     }
-    gameRef.camera.viewport.position.x = -x ;
-    gameRef.camera.viewport.position.y = -y ;
-
+   
     if(direction == -1) {
       animationTicker?.paused = true;
     }else{
@@ -116,27 +114,24 @@ class Character extends SpriteAnimationComponent
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    if (other is Wall) {
+    if (other is Wall && intersectionPoints.length >= 2) {
         collidingObjects[other] = <int>[];
-        for(final p in intersectionPoints) {
-          if(p[0] < x+32) {
-            if(!collidingObjects[other]!.contains(LEFT)) {
-              collidingObjects[other]!.add(LEFT);
-            }
-          }else if(p[0] > x+32) {
-            if(!collidingObjects[other]!.contains(RIGHT)) {
-              collidingObjects[other]!.add(RIGHT);
-            }
+        final xdiff = (intersectionPoints.first[0] - intersectionPoints.last[0]).abs();
+        final ydiff = (intersectionPoints.first[1] - intersectionPoints.last[1]).abs();
+        if(xdiff < ydiff) {
+          //X collision
+          if(intersectionPoints.first[0] < x + 32) {
+              collidingObjects[other]!.add(LEFT);     
+          }else{
+              collidingObjects[other]!.add(RIGHT);       
           }
-          if(p[1] < y+32) {
-            if(!collidingObjects[other]!.contains(UP)) {
-              collidingObjects[other]!.add(UP);
-            }
-          }else if(p[1] > y+32) {
-            if(!collidingObjects[other]!.contains(DOWN)) {
-              collidingObjects[other]!.add(DOWN);
-            }
+        }else{
+          if(intersectionPoints.first[1] < y + 32) {
+              collidingObjects[other]!.add(UP);     
+          }else{
+              collidingObjects[other]!.add(DOWN);       
           }
+          
         }
     }
   }
