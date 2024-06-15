@@ -1,0 +1,53 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "assets/tiles/map.tmx",
+    "expandedProjectPaths": [
+        "assets/tiles",
+        ".",
+        "assets"
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "assets/tiles/background.tsx": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/map.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1331.3333333333333,
+                "y": -47.33333333333337
+            }
+        },
+        "assets/tilesets/background.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1
+        },
+        "assets/tilesets/map.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 697.6666666666665,
+                "y": 407
+            }
+        }
+    },
+    "last.imagePath": "/Users/rob/StudioProjects/map_game/assets/tilesets",
+    "map.height": 200,
+    "map.lastUsedFormat": "tmx",
+    "map.width": 300,
+    "openFiles": [
+        "assets/tiles/map.tmx"
+    ],
+    "project": "tiled.tiled-project",
+    "recentFiles": [
+        "assets/tiles/map.tmx",
+        "assets/tilesets/background.tsx",
+        "assets/tilesets/map.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}
