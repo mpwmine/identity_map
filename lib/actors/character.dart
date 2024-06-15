@@ -6,6 +6,7 @@ import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flame/image_composition.dart';
 import 'package:map_game/main.dart';
+import 'package:map_game/world/interact.dart';
 import 'package:map_game/world/wall.dart';
 
 class Character extends SpriteAnimationComponent

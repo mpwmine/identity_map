@@ -12,15 +12,19 @@
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "assets/tiles/background.tsx": {
+            "dynamicWrapping": false,
             "scaleInDock": 1
         },
         "assets/tiles/map.tmx": {
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 1331.3333333333333,
-                "y": -47.33333333333337
+                "x": 1322,
+                "y": -56.66666666666674
             }
+        },
+        "assets/tiles/objects.tsx": {
+            "dynamicWrapping": true
         },
         "assets/tilesets/background.tsx": {
             "dynamicWrapping": false,
@@ -36,7 +40,7 @@
             }
         }
     },
-    "last.imagePath": "/Users/rob/StudioProjects/map_game/assets/tilesets",
+    "last.imagePath": "/Users/rob/StudioProjects/map_game/assets/images",
     "map.height": 200,
     "map.lastUsedFormat": "tmx",
     "map.width": 300,

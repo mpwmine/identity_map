@@ -10,11 +10,27 @@ import 'package:map_game/actors/character.dart';
 import 'package:map_game/world/wall.dart';
 import 'package:map_game/world/interactions.dart';
 
+import 'overlays/question.dart';
+
+Widget questionBuilder(BuildContext context, MapGame game) {
+  return QuestionOverlay(game);
+}
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Flame.device.fullScreen();
   Flame.device.setLandscape();
-  runApp(GameWidget(game: MapGame()));
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: GameWidget(
+          game: MapGame(),
+          overlayBuilderMap: const {
+              'question': questionBuilder
+          },
+        ),
+      )),
+  );
 }
 
 class MapGame extends FlameGame with HasCollisionDetection {
@@ -38,7 +54,11 @@ class MapGame extends FlameGame with HasCollisionDetection {
     add(homeMap);
    final walls = Wall( homeMap.tileMap.getLayer<TileLayer>('Walls'), Vector2.all(64));
     add(walls);
-    final manager = InteractionManager( homeMap.tileMap.getLayer<ObjectGroup>('Interactions')!, Vector2.all(64));
+    final manager = InteractionManager( homeMap.tileMap.getLayer<ObjectGroup>('Interactions')!, homeMap.tileMap.map, Vector2.all(64));
+    for(final c in manager.compnents) {
+      add(c);
+    }
+    final tile = homeMap.tileMap.map.tileByGid(23);
     
     final Image characterImage = await images.load('character.png');
     character = Character(characterImage)

@@ -412,7 +412,7 @@
  </layer>
  <objectgroup id="4" name="Interactions">
   <object id="42" name="Door" gid="119" x="256" y="32" width="32" height="32"/>
-  <object id="43" type="email" gid="485" x="224" y="224" width="32" height="32">
+  <object id="43" type="email" gid="485" x="256" y="96" width="32" height="32">
    <properties>
     <property name="question" value="Hello"/>
    </properties>
