@@ -102,6 +102,8 @@ class Character extends SpriteAnimationComponent
         }
       }
     }
+    gameRef.camera.viewport.position.x = -x ;
+    gameRef.camera.viewport.position.y = -y ;
 
     if(direction == -1) {
       animationTicker?.paused = true;
