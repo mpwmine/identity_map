@@ -7,6 +7,8 @@ import 'package:flame/palette.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:map_game/actors/character.dart';
+import 'package:map_game/overlays/score.dart';
+import 'package:map_game/question.dart';
 import 'package:map_game/world/wall.dart';
 import 'package:map_game/world/interactions.dart';
 
@@ -25,8 +27,9 @@ void main() {
       home: Scaffold(
         body: GameWidget(
           game: MapGame(),
-          overlayBuilderMap: const {
-              'question': questionBuilder
+          overlayBuilderMap: {
+              'question': questionBuilder,
+              'score': (BuildContext context, MapGame game) { return ScoreOverlay(game); }
           },
         ),
       )),
@@ -36,10 +39,13 @@ void main() {
 class MapGame extends FlameGame with HasCollisionDetection {
   late Character character;
   late final JoystickComponent joystick;
+  Question? currentQuestion;
+  String? questionTitle;
+  int score = 0;
   
   MapGame() :
       super(
-        camera: CameraComponent.withFixedResolution(width: 28*32, height: 14*32),
+        camera: CameraComponent.withFixedResolution(width: 300*64, height: 200*64),
       );
 
   @override
@@ -49,9 +55,10 @@ class MapGame extends FlameGame with HasCollisionDetection {
     camera.viewfinder
       ..zoom = 1.0
       ..anchor = Anchor.center;
-
+   
     final homeMap = await TiledComponent.load('map.tmx', Vector2.all(64));
-    add(homeMap);
+    camera.viewport.size = Vector2(homeMap.width*64, homeMap.height*64);
+   add(homeMap);
    final walls = Wall( homeMap.tileMap.getLayer<TileLayer>('Walls'), Vector2.all(64));
     add(walls);
     final manager = InteractionManager( homeMap.tileMap.getLayer<ObjectGroup>('Interactions')!, homeMap.tileMap.map, Vector2.all(64));
@@ -71,9 +78,13 @@ class MapGame extends FlameGame with HasCollisionDetection {
     joystick = JoystickComponent(
       knob: CircleComponent(radius: 30, paint: knobPaint),
       background: CircleComponent(radius: 100, paint: backgroundPaint),
-      margin: const EdgeInsets.only(left: 40, bottom: 40),
+      margin: const EdgeInsets.only(left: 40, top: 200),
     );
     add(joystick);
+    overlays.add('score');
   }
 
+  void scoreAdd([int value=10]) {
+    score += value;
+  }
 }

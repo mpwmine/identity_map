@@ -64,7 +64,7 @@ class Character extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
     add(RectangleHitbox());
-    debugMode = true;
+    debugMode = false;
   }
 
   @override
