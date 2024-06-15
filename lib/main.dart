@@ -8,6 +8,7 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:map_game/actors/character.dart';
 import 'package:map_game/world/wall.dart';
+import 'package:map_game/world/interactions.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,9 +36,10 @@ class MapGame extends FlameGame with HasCollisionDetection {
 
     final homeMap = await TiledComponent.load('map.tmx', Vector2.all(64));
     add(homeMap);
-    final walls = Wall( homeMap.tileMap.getLayer<TileLayer>('Walls'), Vector2.all(64));
+   final walls = Wall( homeMap.tileMap.getLayer<TileLayer>('Walls'), Vector2.all(64));
     add(walls);
-
+    final manager = InteractionManager( homeMap.tileMap.getLayer<ObjectGroup>('Interactions')!, Vector2.all(64));
+    
     final Image characterImage = await images.load('character.png');
     character = Character(characterImage)
           ..position = Vector2(64,64)
