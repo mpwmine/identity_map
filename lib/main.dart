@@ -1,5 +1,6 @@
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';
@@ -36,7 +37,7 @@ void main() {
   );
 }
 
-class MapGame extends FlameGame with HasCollisionDetection {
+class MapGame extends FlameGame with HasCollisionDetection, HasKeyboardHandlerComponents {
   late final JoystickComponent joystick;
   late Character character;
   Question? currentQuestion;

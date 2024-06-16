@@ -73,6 +73,7 @@ class Character extends SpriteAnimationComponent
         ? 1
         : 0;
 
+    keyboardY = 0;
     keyboardY += (keysPressed.contains(LogicalKeyboardKey.keyW) ||
         keysPressed.contains(LogicalKeyboardKey.arrowLeft))
         ? -1
@@ -96,9 +97,7 @@ class Character extends SpriteAnimationComponent
   @override
   void update(double dt) {
     super.update(dt);
-    final direction = animationMap[gameRef.joystick.direction] ?? -1;
-
-
+    var direction = animationMap[gameRef.joystick.direction] ?? -1;
 
     final double vectorX = (gameRef.joystick.relativeDelta * 300 * dt)[0];
     final double vectorY = (gameRef.joystick.relativeDelta * 300 * dt)[1];
@@ -108,6 +107,12 @@ class Character extends SpriteAnimationComponent
 
     position += Vector2(vectorX, vectorY);
     position += Vector2(keyboardX * 200 * dt, keyboardY * 200 *dt);
+
+    if(keyboardX<0) { direction = LEFT; }
+    if(keyboardY<0) { direction = UP; }
+    if(keyboardX>0) { direction = RIGHT; }
+    if(keyboardY>0) { direction = DOWN; }
+
 
     if(direction == -1) {
       animationTicker?.paused = true;
