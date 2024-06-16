@@ -31,7 +31,7 @@ class _QuestionOverlayState extends State<QuestionOverlay> {
             border: Border.all(color: Colors.white)
           ),
           padding: EdgeInsets.all(10.0),
-          child: Column(
+          child: ListView(
             children: [
               if(widget.game.questionTitle != null)
                 Padding(

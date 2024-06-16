@@ -8,7 +8,7 @@ import 'package:flame_tiled/flame_tiled.dart';
 class Wall extends PositionComponent {
   
   Future<void> onLoad() async {
-      add(RectangleHitbox());
+      add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 }
 

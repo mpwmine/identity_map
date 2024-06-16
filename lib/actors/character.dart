@@ -5,12 +5,13 @@ import 'package:flame/particles.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flame/image_composition.dart';
+import 'package:flutter/services.dart';
 import 'package:map_game/main.dart';
 import 'package:map_game/world/interact.dart';
 import 'package:map_game/world/wall.dart';
 
 class Character extends SpriteAnimationComponent
-    with CollisionCallbacks, HasGameRef<MapGame> {
+    with KeyboardHandler, CollisionCallbacks, HasGameRef<MapGame> {
   final Image image;
   bool flipped = false;
   bool collided = false;
@@ -22,6 +23,8 @@ class Character extends SpriteAnimationComponent
   static const UP = 2;
   static const RIGHT = 1;
   static const LEFT = 3;
+  int keyboardX = 0;
+  int keyboardY = 0;
   
   final animationMap = <JoystickDirection,int>{
     JoystickDirection.down: 0,
@@ -58,6 +61,29 @@ class Character extends SpriteAnimationComponent
     }
   }
 
+  @override
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    keyboardX = 0;
+    keyboardX += (keysPressed.contains(LogicalKeyboardKey.keyA) ||
+        keysPressed.contains(LogicalKeyboardKey.arrowLeft))
+        ? -1
+        : 0;
+    keyboardX += (keysPressed.contains(LogicalKeyboardKey.keyD) ||
+        keysPressed.contains(LogicalKeyboardKey.arrowRight))
+        ? 1
+        : 0;
+
+    keyboardY += (keysPressed.contains(LogicalKeyboardKey.keyW) ||
+        keysPressed.contains(LogicalKeyboardKey.arrowLeft))
+        ? -1
+        : 0;
+    keyboardY += (keysPressed.contains(LogicalKeyboardKey.keyS) ||
+        keysPressed.contains(LogicalKeyboardKey.arrowRight))
+        ? 1
+        : 0;
+    return true;
+  }
+
   int get direction => _direction;
 
   @override
@@ -79,30 +105,10 @@ class Character extends SpriteAnimationComponent
 
     final collideDirections = <int>{};
     collidingObjects.forEach((k,v) => collideDirections.addAll(v));
-    
-    if(direction != -1) {
-      if (vectorX < 0 && x > 0) {
-        if (!collideDirections.contains(LEFT)) {
-          x += vectorX;
-        }
-      }
-      if (vectorX > 0 && x < gameRef.worldSize[0]) {
-        if (!collideDirections.contains(RIGHT)) {
-          x += vectorX;
-        }
-      }
-      if (vectorY < 0 && y > 0) {
-        if (!collideDirections.contains(UP)) {
-          y += vectorY;
-        }
-      }
-      if (vectorY > 0 && y < gameRef.worldSize[1]) {
-        if (!collideDirections.contains(DOWN)) {
-          y += vectorY;
-        }
-      }
-    }
-   
+
+    position += Vector2(vectorX, vectorY);
+    position += Vector2(keyboardX * 200 * dt, keyboardY * 200 *dt);
+
     if(direction == -1) {
       animationTicker?.paused = true;
     }else{
@@ -111,38 +117,34 @@ class Character extends SpriteAnimationComponent
     }
   }
 
+  final Vector2 fromAbove = Vector2(0, -1);
+
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    if (other is Wall && intersectionPoints.length >= 2) {
-        collidingObjects[other] = <int>[];
-        final xdiff = (intersectionPoints.first[0] - intersectionPoints.last[0]).abs();
-        final ydiff = (intersectionPoints.first[1] - intersectionPoints.last[1]).abs();
-        if(xdiff < ydiff) {
-          //X collision
-          if(intersectionPoints.first[0] < x + 32) {
-              collidingObjects[other]!.add(LEFT);     
-          }else{
-              collidingObjects[other]!.add(RIGHT);       
-          }
-        }else{
-          if(intersectionPoints.first[1] < y + 32) {
-              collidingObjects[other]!.add(UP);     
-          }else{
-              collidingObjects[other]!.add(DOWN);       
-          }
-          
-        }
+    if (other is Wall && intersectionPoints.length == 2) {
+      // Calculate the collision normal and separation distance.
+      final mid = (intersectionPoints.elementAt(0) +
+          intersectionPoints.elementAt(1)) / 2;
+
+      final collisionNormal = absoluteCenter - mid;
+      final separationDistance = (size.x * 0.55) - collisionNormal.length;
+      collisionNormal.normalize();
+
+      // If collision normal is almost upwards,
+      // ember must be on ground.
+      //if (fromAbove.dot(collisionNormal) > 0.9) {
+        //isOnGround = true;
+      //}
+
+      // Resolve collision by moving ember along
+      // collision normal by separation distance.
+      position += collisionNormal.scaled(separationDistance);
     }
   }
 
   @override
   void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
-    if (other is Wall) {
-      if(collidingObjects.containsKey(other)) {
-        collidingObjects.remove(other);
-      }
-    }
   }
 }
