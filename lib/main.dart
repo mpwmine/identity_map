@@ -9,6 +9,7 @@ import 'package:flutter/material.dart' hide Image;
 import 'package:map_game/actors/character.dart';
 import 'package:map_game/overlays/score.dart';
 import 'package:map_game/question.dart';
+import 'package:map_game/world/death.dart';
 import 'package:map_game/world/wall.dart';
 import 'package:map_game/world/interactions.dart';
 
@@ -42,6 +43,7 @@ class MapGame extends FlameGame with HasCollisionDetection {
   Question? currentQuestion;
   String? questionTitle;
   int score = 0;
+  Vector2 returnPosition = Vector2(64,64);
   final worldSize = Vector2(300*64, 200*64);
   
   MapGame() :
@@ -59,7 +61,7 @@ class MapGame extends FlameGame with HasCollisionDetection {
 
     final Image characterImage = await Flame.images.load('character.png');
     character = Character(characterImage)
-      ..position = Vector2(64,64)
+      ..position = returnPosition
       ..direction = 1
       ..priority = 100;
     world.add(character);
@@ -80,6 +82,8 @@ class MapGame extends FlameGame with HasCollisionDetection {
 
   void scoreAdd([int value=10]) {
     score += value;
+    overlays.remove('score');
+    overlays.add('score');
   }
 }
 
@@ -92,6 +96,8 @@ class MapWorld extends World {
     add(homeMap);
     final walls = WallGroup( homeMap.tileMap.getLayer<TileLayer>('Walls'), Vector2.all(64));
     add(walls);
+    final deaths = DeathGroup( homeMap.tileMap.getLayer<TileLayer>('Death'), Vector2.all(64));
+    add(deaths);
     final manager = InteractionManager( homeMap.tileMap.getLayer<ObjectGroup>('Interactions')!, homeMap.tileMap.map, Vector2.all(64));
     for(final c in manager.compnents) {
       add(c);

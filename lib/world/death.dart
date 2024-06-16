@@ -5,32 +5,18 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
-class Wall extends PositionComponent {
+class Death extends PositionComponent {
   
   Future<void> onLoad() async {
       add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 }
 
-class InvisibleWall extends PositionComponent {
-  final TiledObject object;
-
-  InvisibleWall(this.object);
-  
-  
-  Future<void> onLoad() async {
-    //debugMode = true;
-    position = object.position * 2;
-    size = object.size * 2;
-    add(RectangleHitbox(collisionType: CollisionType.passive));
-  }
-}
-
-class WallGroup extends PositionComponent {
+class DeathGroup extends PositionComponent {
   final TileLayer? tileLayer;
   final Vector2 tileSize;
 
-  WallGroup(this.tileLayer, this.tileSize) : super();
+  DeathGroup(this.tileLayer, this.tileSize) : super();
 
   Future<void> onLoad() async {
     if(tileLayer != null) {
@@ -38,7 +24,7 @@ class WallGroup extends PositionComponent {
         for (int x = 0; x < tileLayer!.width; x++) {
           if (tileLayer!.tileData![y][x].tile > 0) {
             add(
-              Wall()
+              Death()
                 ..position = Vector2(x * tileSize.x, y * tileSize.y)
                 ..size = tileSize
             );

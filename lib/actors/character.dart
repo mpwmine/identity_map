@@ -7,6 +7,7 @@ import 'package:flutter/material.dart' hide Image;
 import 'package:flame/image_composition.dart';
 import 'package:flutter/services.dart';
 import 'package:map_game/main.dart';
+import 'package:map_game/world/death.dart';
 import 'package:map_game/world/interact.dart';
 import 'package:map_game/world/wall.dart';
 
@@ -73,6 +74,7 @@ class Character extends SpriteAnimationComponent
         ? 1
         : 0;
 
+    keyboardY = 0;
     keyboardY += (keysPressed.contains(LogicalKeyboardKey.keyW) ||
         keysPressed.contains(LogicalKeyboardKey.arrowLeft))
         ? -1
@@ -90,15 +92,13 @@ class Character extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
     add(RectangleHitbox());
-    debugMode = false;
+    //debugMode = true;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
     final direction = animationMap[gameRef.joystick.direction] ?? -1;
-
-
 
     final double vectorX = (gameRef.joystick.relativeDelta * 300 * dt)[0];
     final double vectorY = (gameRef.joystick.relativeDelta * 300 * dt)[1];
@@ -128,7 +128,7 @@ class Character extends SpriteAnimationComponent
           intersectionPoints.elementAt(1)) / 2;
 
       final collisionNormal = absoluteCenter - mid;
-      final separationDistance = (size.x * 0.55) - collisionNormal.length;
+      final separationDistance = (size.x * 0.56) - collisionNormal.length;
       collisionNormal.normalize();
 
       // If collision normal is almost upwards,
@@ -140,6 +140,15 @@ class Character extends SpriteAnimationComponent
       // Resolve collision by moving ember along
       // collision normal by separation distance.
       position += collisionNormal.scaled(separationDistance);
+    }
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+    // TODO: implement onCollisionStart
+    super.onCollisionStart(intersectionPoints, other);
+    if(other is Death){
+      position = gameRef.returnPosition; 
     }
   }
 
