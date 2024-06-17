@@ -1,7 +1,7 @@
 
+import 'dart:async';
 
-
-import 'package:flame/components.dart';
+import 'package:flame/components.dart' hide Timer;
 import 'package:map_game/actors/character.dart';
 import 'package:map_game/main.dart';
 import 'package:map_game/question.dart';
@@ -15,6 +15,10 @@ class FishComponent extends InteractComponent with HasGameReference<MapGame> {
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     if(other is Character) {
       gameRef.scoreAdd(5);
+      gameRef.overlays.add("phished");
+      Timer(Duration(milliseconds: 500), () {
+        gameRef.overlays.remove('phished');
+      });
     }
     super.onCollisionStart(intersectionPoints, other);
   }
@@ -40,7 +44,7 @@ class FishComponent extends InteractComponent with HasGameReference<MapGame> {
   @override
   void update(double dt) {
     super.update(dt);
-
+    
     final v = gameRef.character.position - position;
     if(v.length < 6*64) {
       position += v.normalized() * 100 * dt;

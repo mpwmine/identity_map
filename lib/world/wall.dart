@@ -26,6 +26,19 @@ class InvisibleWall extends PositionComponent {
   }
 }
 
+class EndScreen extends PositionComponent {
+  final TiledObject object;
+
+  EndScreen(this.object);
+  
+  Future<void> onLoad() async {
+    position = object.position * 2;
+    size = object.size * 2;
+    add(RectangleHitbox(collisionType: CollisionType.passive));
+  }
+}
+
+
 class WallGroup extends PositionComponent {
   final TileLayer? tileLayer;
   final Vector2 tileSize;

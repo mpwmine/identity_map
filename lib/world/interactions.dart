@@ -18,6 +18,8 @@ class InteractionManager {
     for(final o in group.objects) {
       if( o.class_ == 'invisible_wall') {
         compnents.add(InvisibleWall(o));       
+      }else if( o.class_ == 'end_screen') {
+        compnents.add(EndScreen(o));       
       }else if(o.gid != null) {
         final tileset = tileMap.tilesetByTileGId(o.gid!);
         final tile = tileMap.tileByGid(o.gid!);

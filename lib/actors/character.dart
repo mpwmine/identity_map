@@ -21,9 +21,9 @@ class Character extends SpriteAnimationComponent
   final animations = <SpriteAnimation>[];
   int _direction = 0;
   static const DOWN = 0;
-  static const UP = 2;
+  static const UP = 3;
   static const RIGHT = 1;
-  static const LEFT = 3;
+  static const LEFT = 2;
   int keyboardX = 0;
   int keyboardY = 0;
   
@@ -98,7 +98,11 @@ class Character extends SpriteAnimationComponent
   @override
   void update(double dt) {
     super.update(dt);
-    final direction = animationMap[gameRef.joystick.direction] ?? -1;
+    if(gameRef.overlays.isActive('question') || gameRef.overlays.isActive('end_screen')) {
+      return;
+    }
+
+    var direction = animationMap[gameRef.joystick.direction] ?? -1;
 
     final double vectorX = (gameRef.joystick.relativeDelta * 300 * dt)[0];
     final double vectorY = (gameRef.joystick.relativeDelta * 300 * dt)[1];
@@ -107,7 +111,13 @@ class Character extends SpriteAnimationComponent
     collidingObjects.forEach((k,v) => collideDirections.addAll(v));
 
     position += Vector2(vectorX, vectorY);
-    position += Vector2(keyboardX * 200 * dt, keyboardY * 200 *dt);
+    position += Vector2(keyboardX * 300 * dt, keyboardY * 300 *dt);
+
+    if(keyboardX<0) { direction = LEFT; }
+    if(keyboardY<0) { direction = UP; }
+    if(keyboardX>0) { direction = RIGHT; }
+    if(keyboardY>0) { direction = DOWN; }
+
 
     if(direction == -1) {
       animationTicker?.paused = true;
@@ -149,6 +159,9 @@ class Character extends SpriteAnimationComponent
     super.onCollisionStart(intersectionPoints, other);
     if(other is Death){
       position = gameRef.returnPosition; 
+    }
+    if(other is EndScreen){
+      gameRef.overlays.add('end_screen'); 
     }
   }
 

@@ -1,16 +1,3 @@
-# map_game
+# Identity Theft Game
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This project was made for the BCS coding competition, all instructions are in the game for how to play. This was made for the Year 8 topic: Identity Theft. This was made using the coding language DART, using the Flutter Flame framework

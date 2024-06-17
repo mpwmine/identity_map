@@ -13,8 +13,23 @@ class EmailComponent extends InteractComponent with HasGameReference<MapGame> {
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     if(other is Character) {
-      gameRef.currentQuestion = QuestionList.randomQuestion();
-      gameRef.questionTitle = 'You have just received and email? What are you going to do?';
+      while(true) {
+        gameRef.currentQuestion = QuestionList.randomQuestion();
+        if(gameRef.questionSeen.length >= QuestionList.questions.length) {
+          gameRef.questionSeen.clear();
+        }
+        if(!gameRef.questionSeen.contains( gameRef.currentQuestion )) {
+          gameRef.questionSeen.add( gameRef.currentQuestion! );
+          break;
+        }
+      }
+      if (gameRef.currentQuestion!.type == 'situation') {
+        gameRef.questionTitle = 'What do you do in this situation';
+      }
+      else{
+        gameRef.questionTitle = 'You have recieved an email. What do you do?';
+      }
+        
       gameRef.overlays.add('question');
       gameRef.returnPosition = position;
     }
