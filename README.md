@@ -4,3 +4,4 @@ This project was made for the BCS coding competition, all instructions are in th
 
 ## Download
 Use this link to download: https://github.com/mpwmine/identity_map/raw/main/dist/map_game.zip
+After downloading extact the ZIP file before playing the game
